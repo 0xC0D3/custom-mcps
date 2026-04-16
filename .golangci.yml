@@ -1,0 +1,104 @@
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    # Bugs and correctness
+    - errcheck
+    - govet
+    - staticcheck
+    - bodyclose
+    - nilerr
+    - sqlclosecheck
+    - contextcheck
+
+    # Code quality
+    - gocritic
+    - revive
+    - unconvert
+    - unparam
+    - unused
+    - ineffassign
+    - prealloc
+
+    # Style and formatting
+    - gofmt
+    - goimports
+    - misspell
+    - whitespace
+
+    # Security
+    - gosec
+
+    # Performance
+    - copyloopvar
+
+    # Error handling
+    - errorlint
+    - wrapcheck
+
+    # Documentation
+    - godot
+
+linters-settings:
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+    disabled-checks:
+      - hugeParam
+
+  revive:
+    rules:
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: superfluous-else
+      - name: unreachable-code
+
+  gosec:
+    excludes:
+      - G104
+
+  errorlint:
+    errorf: true
+    asserts: true
+    comparison: true
+
+  goimports:
+    local-prefixes: github.com/0xC0D3
+
+  misspell:
+    locale: US
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - wrapcheck
+        - gosec
+        - gocritic
+        - errcheck
+
+    - path: _test\.go
+      text: "dot-imports"
+
+  max-issues-per-linter: 0
+  max-same-issues: 0

@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "filepath=\"$CLAUDE_FILE_PATH\"; if [[ \"$filepath\" == *.go ]]; then cd \"$(git rev-parse --show-toplevel)\" && go vet ./$(dirname \"$filepath\")/... 2>&1 | tail -5; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(go test:*)",
+      "Bash(go build:*)",
+      "Bash(go vet:*)",
+      "Bash(golangci-lint:*)",
+      "Bash(go run:*)",
+      "Bash(go mod tidy:*)"
+    ]
+  }
+}
