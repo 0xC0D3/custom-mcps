@@ -1,0 +1,24 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+/cloudflare
+
+# Test artifacts
+go-expert-workspace/
+
+# Skill source (installed to ~/.claude/skills/)
+go-expert/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
