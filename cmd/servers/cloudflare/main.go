@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -47,5 +48,8 @@ func run() error {
 	srv := server.New(opts...)
 	registerTools(srv)
 
-	return srv.Run(ctx)
+	if err := srv.Run(ctx); err != nil {
+		return fmt.Errorf("server run: %w", err)
+	}
+	return nil
 }

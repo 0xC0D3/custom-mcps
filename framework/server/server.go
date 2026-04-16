@@ -122,7 +122,7 @@ func (s *Server) handleNotification(n *protocol.Notification) json.RawMessage {
 	switch n.Method {
 	case "notifications/initialized":
 		s.initialized = true
-	case "notifications/cancelled":
+	case "notifications/cancelled": //nolint:misspell // MCP protocol method name uses British spelling
 		s.logger.Info("request canceled by client")
 	default:
 		s.logger.Info("unknown notification", slog.String("method", n.Method))
