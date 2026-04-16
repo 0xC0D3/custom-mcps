@@ -9,17 +9,17 @@ import (
 	"time"
 )
 
-// metricsData holds the collected metrics for JSON serialisation.
+// metricsData holds the collected metrics for JSON serialization.
 type metricsData struct {
-	TotalRequests int64              `json:"total_requests"`
-	StatusCodes   map[string]int64   `json:"status_codes"`
-	AvgDurationMS float64            `json:"avg_duration_ms"`
+	TotalRequests int64            `json:"total_requests"`
+	StatusCodes   map[string]int64 `json:"status_codes"`
+	AvgDurationMS float64          `json:"avg_duration_ms"`
 }
 
 // metricsCollector accumulates request metrics in a thread-safe manner.
 type metricsCollector struct {
 	totalRequests atomic.Int64
-	statusCodes   sync.Map // map[int]*atomic.Int64
+	statusCodes   sync.Map     // map[int]*atomic.Int64
 	totalDuration atomic.Int64 // nanoseconds
 }
 
@@ -90,4 +90,3 @@ func Metrics(path string) HTTPMiddleware {
 		})
 	}
 }
-

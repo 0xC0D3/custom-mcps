@@ -51,7 +51,7 @@ func registerTools(srv *server.Server) {
 }
 
 // handleListZones returns a list of DNS zones.
-// TODO: Replace with actual Cloudflare API calls
+// TODO: Replace with actual Cloudflare API calls.
 func handleListZones(_ context.Context, input ListZonesInput) (*protocol.CallToolResult, error) {
 	page := input.Page
 	if page < 1 {
@@ -64,19 +64,19 @@ func handleListZones(_ context.Context, input ListZonesInput) (*protocol.CallToo
 
 	zones := []map[string]any{
 		{
-			"id":         "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
-			"name":       "example.com",
-			"status":     "active",
-			"paused":     false,
-			"type":       "full",
+			"id":          "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+			"name":        "example.com",
+			"status":      "active",
+			"paused":      false,
+			"type":        "full",
 			"nameServers": []string{"aria.ns.cloudflare.com", "kyle.ns.cloudflare.com"},
 		},
 		{
-			"id":         "f6e5d4c3b2a1f6e5d4c3b2a1f6e5d4c3",
-			"name":       "myapp.dev",
-			"status":     "active",
-			"paused":     false,
-			"type":       "full",
+			"id":          "f6e5d4c3b2a1f6e5d4c3b2a1f6e5d4c3",
+			"name":        "myapp.dev",
+			"status":      "active",
+			"paused":      false,
+			"type":        "full",
 			"nameServers": []string{"beth.ns.cloudflare.com", "otto.ns.cloudflare.com"},
 		},
 	}
@@ -92,7 +92,7 @@ func handleListZones(_ context.Context, input ListZonesInput) (*protocol.CallToo
 }
 
 // handleListDNSRecords returns DNS records for a given zone.
-// TODO: Replace with actual Cloudflare API calls
+// TODO: Replace with actual Cloudflare API calls.
 func handleListDNSRecords(_ context.Context, input ListDNSRecordsInput) (*protocol.CallToolResult, error) {
 	records := []map[string]any{
 		{
@@ -139,7 +139,7 @@ func handleListDNSRecords(_ context.Context, input ListDNSRecordsInput) (*protoc
 	}
 
 	// Apply filters if provided.
-	var filtered []map[string]any
+	filtered := make([]map[string]any, 0, len(records))
 	for _, r := range records {
 		if input.RecordType != "" && r["type"] != input.RecordType {
 			continue
@@ -159,7 +159,7 @@ func handleListDNSRecords(_ context.Context, input ListDNSRecordsInput) (*protoc
 }
 
 // handleCreateDNSRecord creates a new DNS record in a zone.
-// TODO: Replace with actual Cloudflare API calls
+// TODO: Replace with actual Cloudflare API calls.
 func handleCreateDNSRecord(_ context.Context, input CreateDNSRecordInput) (*protocol.CallToolResult, error) {
 	ttl := input.TTL
 	if ttl < 1 {

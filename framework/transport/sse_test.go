@@ -15,6 +15,8 @@ import (
 )
 
 // newSSETestServer creates an httptest.Server wired to an SSETransport's handlers.
+//
+//nolint:unparam // opts kept for future use.
 func newSSETestServer(t *testing.T, handler MessageHandler, opts ...SSEOption) (*httptest.Server, *SSETransport) {
 	t.Helper()
 	tr := NewSSE(opts...)
@@ -25,7 +27,7 @@ func newSSETestServer(t *testing.T, handler MessageHandler, opts ...SSEOption) (
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		tr.handleSSE(context.Background(), w, r)
+		tr.handleSSE(context.Background(), w, r) //nolint:contextcheck
 	})
 
 	mux.HandleFunc(tr.msgEndpoint, func(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +35,7 @@ func newSSETestServer(t *testing.T, handler MessageHandler, opts ...SSEOption) (
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		tr.handleMessages(context.Background(), w, r, handler)
+		tr.handleMessages(context.Background(), w, r, handler) //nolint:contextcheck
 	})
 
 	if tr.healthPath != "" {

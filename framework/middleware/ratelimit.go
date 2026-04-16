@@ -41,7 +41,7 @@ func (tb *tokenBucket) allow() bool {
 // RateLimit returns HTTP middleware that limits requests per client IP using a
 // token bucket algorithm. requestsPerSecond controls the refill rate and burst
 // controls the maximum number of tokens (and thus the burst size).
-func RateLimit(requestsPerSecond int, burst int) HTTPMiddleware {
+func RateLimit(requestsPerSecond, burst int) HTTPMiddleware {
 	var buckets sync.Map
 
 	return func(next http.Handler) http.Handler {

@@ -20,9 +20,9 @@ type Config struct {
 // a Config with sensible defaults applied.
 func loadConfig() Config {
 	cfg := Config{
-		Transport: envOrDefault("CF_TRANSPORT", "stdio"),
-		Addr:      envOrDefault("CF_ADDR", ":8080"),
-		APIToken:  os.Getenv("CF_API_TOKEN"),
+		Transport:    envOrDefault("CF_TRANSPORT", "stdio"),
+		Addr:         envOrDefault("CF_ADDR", ":8080"),
+		APIToken:     os.Getenv("CF_API_TOKEN"),
 		MCPAuthToken: os.Getenv("CF_MCP_TOKEN"),
 	}
 	return cfg

@@ -9,11 +9,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"github.com/0xC0D3/custom-mcps/framework/protocol"
 	"github.com/0xC0D3/custom-mcps/framework/registry"
 	"github.com/0xC0D3/custom-mcps/framework/transport"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 // testHelper holds the test server infrastructure.
@@ -367,8 +368,10 @@ func TestServer_InitializeCapabilities(t *testing.T) {
 			},
 		})
 		s.Registry().RegisterPrompt(registry.PromptDefinition{
-			Info:    protocol.PromptInfo{Name: "p1"},
-			Handler: func(ctx context.Context, args map[string]string) (*protocol.GetPromptResult, error) { return &protocol.GetPromptResult{}, nil },
+			Info: protocol.PromptInfo{Name: "p1"},
+			Handler: func(ctx context.Context, args map[string]string) (*protocol.GetPromptResult, error) {
+				return &protocol.GetPromptResult{}, nil
+			},
 		})
 	})
 	defer h.close(t)

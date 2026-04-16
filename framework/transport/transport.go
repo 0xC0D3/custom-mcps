@@ -14,7 +14,7 @@ type MessageHandler func(ctx context.Context, raw json.RawMessage) json.RawMessa
 // Transport defines how an MCP server communicates with clients.
 type Transport interface {
 	// Start begins accepting connections/messages. It blocks until
-	// ctx is cancelled or a fatal error occurs.
+	// ctx is canceled or a fatal error occurs.
 	Start(ctx context.Context, handler MessageHandler) error
 
 	// Send pushes a server-initiated message (notification) to connected clients.

@@ -13,6 +13,13 @@ import (
 )
 
 func main() {
+	if err := run(); err != nil {
+		slog.Error("server exited with error", "error", err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
 	cfg := loadConfig()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -28,7 +35,7 @@ func main() {
 	}
 
 	// Build server options.
-	opts := []server.ServerOption{
+	opts := []server.Option{
 		server.WithName("cloudflare-mcp"),
 		server.WithVersion("0.1.0"),
 		server.WithTransport(t),
@@ -40,8 +47,5 @@ func main() {
 	srv := server.New(opts...)
 	registerTools(srv)
 
-	if err := srv.Run(ctx); err != nil {
-		slog.Error("server exited with error", "error", err)
-		os.Exit(1)
-	}
+	return srv.Run(ctx)
 }

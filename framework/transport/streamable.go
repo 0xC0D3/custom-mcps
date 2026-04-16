@@ -3,6 +3,7 @@ package transport
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net"
@@ -81,7 +82,7 @@ func NewStreamableHTTP(opts ...StreamableOption) *StreamableHTTPTransport {
 	return t
 }
 
-// Start begins serving HTTP and blocks until ctx is cancelled or a fatal error occurs.
+// Start begins serving HTTP and blocks until ctx is canceled or a fatal error occurs.
 func (t *StreamableHTTPTransport) Start(ctx context.Context, handler MessageHandler) error {
 	mux := http.NewServeMux()
 
@@ -112,8 +113,9 @@ func (t *StreamableHTTPTransport) Start(ctx context.Context, handler MessageHand
 	}
 
 	t.httpServer = &http.Server{
-		Addr:    t.addr,
-		Handler: h,
+		Addr:              t.addr,
+		Handler:           h,
+		ReadHeaderTimeout: 10 * time.Second,
 	}
 
 	errCh := make(chan error, 1)
@@ -145,13 +147,18 @@ func (t *StreamableHTTPTransport) Send(_ context.Context, msg json.RawMessage) e
 }
 
 // Close performs a graceful shutdown of the HTTP server.
+//
+//nolint:contextcheck // Close uses an internal timeout context by design.
 func (t *StreamableHTTPTransport) Close() error {
 	if t.httpServer == nil {
 		return nil
 	}
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	return t.httpServer.Shutdown(shutdownCtx)
+	if err := t.httpServer.Shutdown(shutdownCtx); err != nil {
+		return fmt.Errorf("shutting down server: %w", err)
+	}
+	return nil
 }
 
 // Addr returns the listener address after the server has started.

@@ -11,10 +11,10 @@ import (
 
 func TestGenerate_BasicTypes(t *testing.T) {
 	type Input struct {
-		Name    string  `json:"name"`
-		Age     int     `json:"age"`
-		Score   float64 `json:"score"`
-		Active  bool    `json:"active"`
+		Name   string  `json:"name"`
+		Age    int     `json:"age"`
+		Score  float64 `json:"score"`
+		Active bool    `json:"active"`
 	}
 
 	s := Generate[Input]()

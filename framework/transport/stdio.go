@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -53,7 +54,7 @@ func NewStdio(opts ...StdioOption) *StdioTransport {
 
 // Start reads newline-delimited JSON from the input, dispatches each message
 // to handler, and writes any non-nil response as a single JSON line to the output.
-// It blocks until ctx is cancelled or the input stream ends.
+// It blocks until ctx is canceled or the input stream ends.
 func (t *StdioTransport) Start(ctx context.Context, handler MessageHandler) error {
 	scanner := bufio.NewScanner(t.in)
 	// MCP messages can be large; allow up to 1 MB per line.
@@ -92,7 +93,7 @@ func (t *StdioTransport) Start(ctx context.Context, handler MessageHandler) erro
 			return nil
 		default:
 			t.logger.Error("scanner error", "error", err)
-			return err
+			return fmt.Errorf("reading input: %w", err)
 		}
 	}
 
@@ -114,8 +115,10 @@ func (t *StdioTransport) writeLine(data []byte) error {
 	defer t.mu.Unlock()
 
 	if _, err := t.out.Write(data); err != nil {
-		return err
+		return fmt.Errorf("writing message: %w", err)
 	}
-	_, err := t.out.Write([]byte("\n"))
-	return err
+	if _, err := t.out.Write([]byte("\n")); err != nil {
+		return fmt.Errorf("writing newline: %w", err)
+	}
+	return nil
 }

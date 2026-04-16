@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -35,7 +36,7 @@ type Server struct {
 }
 
 // New creates a new Server with sensible defaults and applies the given options.
-func New(opts ...ServerOption) *Server {
+func New(opts ...Option) *Server {
 	s := &Server{
 		name:     "mcp-server",
 		version:  "1.0.0",
@@ -64,7 +65,7 @@ func Tool[T any](s *Server, name, description string, handler func(ctx context.C
 	registry.RegisterTool[T](s.registry, name, description, handler)
 }
 
-// Run starts the server and blocks until the context is cancelled or a fatal
+// Run starts the server and blocks until the context is canceled or a fatal
 // error occurs. It builds the middleware chain and starts the transport.
 func (s *Server) Run(ctx context.Context) error {
 	// Build the handler chain. Start with dispatch as the innermost handler.
@@ -88,7 +89,10 @@ func (s *Server) Run(ctx context.Context) error {
 	// They have the same underlying signature, so a direct type conversion works.
 	handler := transport.MessageHandler(base)
 
-	return s.transport.Start(ctx, handler)
+	if err := s.transport.Start(ctx, handler); err != nil {
+		return fmt.Errorf("running transport: %w", err)
+	}
+	return nil
 }
 
 // dispatch is the core JSON-RPC router. It parses incoming messages and routes
@@ -119,7 +123,7 @@ func (s *Server) handleNotification(n *protocol.Notification) json.RawMessage {
 	case "notifications/initialized":
 		s.initialized = true
 	case "notifications/cancelled":
-		s.logger.Info("request cancelled by client")
+		s.logger.Info("request canceled by client")
 	default:
 		s.logger.Info("unknown notification", slog.String("method", n.Method))
 	}

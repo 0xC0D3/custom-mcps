@@ -12,9 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/0xC0D3/custom-mcps/framework/protocol"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/0xC0D3/custom-mcps/framework/protocol"
 )
 
 // ---------------------------------------------------------------------------

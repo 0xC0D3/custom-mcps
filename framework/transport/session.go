@@ -48,7 +48,7 @@ func (s *session) writeSSE(data []byte) {
 // It returns a done channel (closed when the session is deleted) and a
 // cleanup function that must be called when the HTTP handler returns to
 // prevent writes to the closed connection.
-func (s *session) addWriter(w http.ResponseWriter, flusher http.Flusher) (<-chan struct{}, func()) {
+func (s *session) addWriter(w http.ResponseWriter, flusher http.Flusher) (done <-chan struct{}, cleanup func()) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

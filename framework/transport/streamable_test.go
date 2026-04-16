@@ -37,9 +37,9 @@ func newStreamableTestServer(t *testing.T, handler MessageHandler, opts ...Strea
 	mux.HandleFunc(tr.endpoint, func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
-			tr.handlePost(context.Background(), w, r, handler)
+			tr.handlePost(context.Background(), w, r, handler) //nolint:contextcheck
 		case http.MethodGet:
-			tr.handleGet(context.Background(), w, r)
+			tr.handleGet(context.Background(), w, r) //nolint:contextcheck
 		case http.MethodDelete:
 			tr.handleDelete(w, r)
 		default:

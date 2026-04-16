@@ -1,7 +1,10 @@
 // Package protocol defines JSON-RPC 2.0 message types and MCP data structures.
 package protocol
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // JSONRPCVersion is the JSON-RPC protocol version supported by this package.
 const JSONRPCVersion = "2.0"
@@ -44,7 +47,7 @@ type Notification struct {
 func NewResponse(id json.RawMessage, result any) (*Response, error) {
 	raw, err := json.Marshal(result)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling response: %w", err)
 	}
 	return &Response{
 		JSONRPC: JSONRPCVersion,
